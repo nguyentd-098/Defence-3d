@@ -412,6 +412,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc54f166dafa831469b5d690ba667408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdvancedMapGenerator
+  hexPrefab: {fileID: 5597573091279368813, guid: 5977c7403f3ad2c42b1288c820b4a06d, type: 3}
+  roadPrefab: {fileID: 6902801243065789034, guid: e771cbdfd281a21498b7b766813860ab, type: 3}
+  treePrefabs:
+  - {fileID: 4268074914293335838, guid: 00531f7af29dee249a0b6f91dcb4af87, type: 3}
+  - {fileID: 7122607708730944049, guid: f87c366a684ac914a840c1bfe86a8782, type: 3}
+  - {fileID: 4386852002896328206, guid: 3e197db906bdce8418e61e528949b304, type: 3}
+  - {fileID: 2570135536112903743, guid: cb0a24110a297cb4d8fcbcefcc318f43, type: 3}
+  rockPrefabs:
+  - {fileID: 4783247100297402142, guid: aa05ab30a1d308140b9f8cb294fc9452, type: 3}
+  - {fileID: 7985736434886627132, guid: 402334169321b954ebf2d2acd2b5a71a, type: 3}
+  waterPrefab: {fileID: 4359520790594294332, guid: b520384a9e949fb4fa972fe2396b5a1d, type: 3}
+  width: 30
+  height: 28
 --- !u!4 &500637675
 Transform:
   m_ObjectHideFlags: 0
@@ -476,134 +489,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1041831202
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1041831203}
-  - component: {fileID: 1041831204}
-  m_Layer: 0
-  m_Name: MapRenderer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1041831203
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1041831202}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1259762150}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1041831204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1041831202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01aff614671fcb7428925e2241e47fe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapRenderer
-  grassPrefab: {fileID: 919132149155446097, guid: 84e22fafce14eec4e8cbb1ae1d6e4719, type: 3}
-  roadPrefab: {fileID: 919132149155446097, guid: d375940a403fe65418d5524af487edcb, type: 3}
-  waterPrefab: {fileID: 919132149155446097, guid: 8ee934d2e23e1f34c9f6d954ed32c24a, type: 3}
-  treePrefabs:
-  - {fileID: 919132149155446097, guid: 59d9a26b158bb094eb9f69bc0338b1a7, type: 3}
-  - {fileID: 919132149155446097, guid: 3b4058806009e054ba77fd12291b4a6a, type: 3}
-  - {fileID: 919132149155446097, guid: 3ff725aa71e6e4a48910d799fe78b03c, type: 3}
-  - {fileID: 919132149155446097, guid: 7120d3638b66ab347a11a420467e141a, type: 3}
-  - {fileID: 919132149155446097, guid: 5f8ce356f69d921498bd13ea422b0a31, type: 3}
-  - {fileID: 919132149155446097, guid: c8381831a2e2e1747b91da8dce8580aa, type: 3}
-  - {fileID: 919132149155446097, guid: e781f3acb536ede4c8682f13f0db2a3b, type: 3}
-  - {fileID: 919132149155446097, guid: 90ed6eee223c27145aa0f9b939d63d4d, type: 3}
-  - {fileID: 919132149155446097, guid: eb2f9f65a89de7945bf8df258123375c, type: 3}
-  - {fileID: 919132149155446097, guid: 0040466494018c441b1a3ab4f5c1eb20, type: 3}
-  - {fileID: 919132149155446097, guid: e654e5e1a404a6e40a97304edf764ddf, type: 3}
-  rockPrefabs:
-  - {fileID: 919132149155446097, guid: 59d9a26b158bb094eb9f69bc0338b1a7, type: 3}
-  - {fileID: 919132149155446097, guid: 3b4058806009e054ba77fd12291b4a6a, type: 3}
-  - {fileID: 919132149155446097, guid: 3ff725aa71e6e4a48910d799fe78b03c, type: 3}
-  - {fileID: 919132149155446097, guid: 7120d3638b66ab347a11a420467e141a, type: 3}
-  - {fileID: 919132149155446097, guid: 5f8ce356f69d921498bd13ea422b0a31, type: 3}
-  - {fileID: 919132149155446097, guid: c8381831a2e2e1747b91da8dce8580aa, type: 3}
-  - {fileID: 919132149155446097, guid: e781f3acb536ede4c8682f13f0db2a3b, type: 3}
-  - {fileID: 919132149155446097, guid: 90ed6eee223c27145aa0f9b939d63d4d, type: 3}
-  - {fileID: 919132149155446097, guid: eb2f9f65a89de7945bf8df258123375c, type: 3}
-  - {fileID: 919132149155446097, guid: 0040466494018c441b1a3ab4f5c1eb20, type: 3}
-  - {fileID: 919132149155446097, guid: e654e5e1a404a6e40a97304edf764ddf, type: 3}
-  - {fileID: 919132149155446097, guid: a5994e5636fc64c4eba671e6b3b43f04, type: 3}
-  - {fileID: 919132149155446097, guid: 04a074e879d08f742b210eca828c56b0, type: 3}
-  - {fileID: 919132149155446097, guid: ddb844cde6b38604ba3b08ce067cdf13, type: 3}
-  - {fileID: 919132149155446097, guid: 3d9145166365cd140a768889f4fe3c5d, type: 3}
-  - {fileID: 919132149155446097, guid: b7dc1070c2e9e1b4fab5e6de4993c182, type: 3}
-  - {fileID: 919132149155446097, guid: 8ed75e949a7edac40aa0203774b53124, type: 3}
-  - {fileID: 919132149155446097, guid: 4b7f9ff98537cce4d8795d3873673d2d, type: 3}
-  hexWidth: 1
-  hexHeight: 0.86
---- !u!1 &1259762148
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1259762150}
-  - component: {fileID: 1259762149}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1259762149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259762148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62c9c446e978932489e4a24c023cecbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  width: 15
-  height: 15
-  mapRenderer: {fileID: 1041831204}
---- !u!4 &1259762150
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259762148}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.98853, y: 0, z: 19.78985}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1041831203}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -612,4 +497,3 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 500637675}
-  - {fileID: 1259762150}

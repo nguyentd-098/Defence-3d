@@ -523,6 +523,7 @@ MonoBehaviour:
   grassPrefab: {fileID: 919132149155446097, guid: 84e22fafce14eec4e8cbb1ae1d6e4719, type: 3}
   roadPrefab: {fileID: 919132149155446097, guid: d375940a403fe65418d5524af487edcb, type: 3}
   waterPrefab: {fileID: 919132149155446097, guid: 8ee934d2e23e1f34c9f6d954ed32c24a, type: 3}
+  rockHexPrefab: {fileID: 8240421105563685881, guid: ee38d19763de1eb41b4e0fc8f0fd8a68, type: 3}
   treePrefabs:
   - {fileID: 919132149155446097, guid: 59d9a26b158bb094eb9f69bc0338b1a7, type: 3}
   - {fileID: 919132149155446097, guid: 3b4058806009e054ba77fd12291b4a6a, type: 3}
@@ -536,22 +537,6 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 0040466494018c441b1a3ab4f5c1eb20, type: 3}
   - {fileID: 919132149155446097, guid: e654e5e1a404a6e40a97304edf764ddf, type: 3}
   rockPrefabs:
-  - {fileID: 919132149155446097, guid: 59d9a26b158bb094eb9f69bc0338b1a7, type: 3}
-  - {fileID: 919132149155446097, guid: 3b4058806009e054ba77fd12291b4a6a, type: 3}
-  - {fileID: 919132149155446097, guid: 3ff725aa71e6e4a48910d799fe78b03c, type: 3}
-  - {fileID: 919132149155446097, guid: 7120d3638b66ab347a11a420467e141a, type: 3}
-  - {fileID: 919132149155446097, guid: 5f8ce356f69d921498bd13ea422b0a31, type: 3}
-  - {fileID: 919132149155446097, guid: c8381831a2e2e1747b91da8dce8580aa, type: 3}
-  - {fileID: 919132149155446097, guid: e781f3acb536ede4c8682f13f0db2a3b, type: 3}
-  - {fileID: 919132149155446097, guid: 90ed6eee223c27145aa0f9b939d63d4d, type: 3}
-  - {fileID: 919132149155446097, guid: eb2f9f65a89de7945bf8df258123375c, type: 3}
-  - {fileID: 919132149155446097, guid: 0040466494018c441b1a3ab4f5c1eb20, type: 3}
-  - {fileID: 919132149155446097, guid: e654e5e1a404a6e40a97304edf764ddf, type: 3}
-  - {fileID: 919132149155446097, guid: a5994e5636fc64c4eba671e6b3b43f04, type: 3}
-  - {fileID: 919132149155446097, guid: 04a074e879d08f742b210eca828c56b0, type: 3}
-  - {fileID: 919132149155446097, guid: ddb844cde6b38604ba3b08ce067cdf13, type: 3}
-  - {fileID: 919132149155446097, guid: 3d9145166365cd140a768889f4fe3c5d, type: 3}
-  - {fileID: 919132149155446097, guid: b7dc1070c2e9e1b4fab5e6de4993c182, type: 3}
   - {fileID: 919132149155446097, guid: 8ed75e949a7edac40aa0203774b53124, type: 3}
   - {fileID: 919132149155446097, guid: 4b7f9ff98537cce4d8795d3873673d2d, type: 3}
   hexWidth: 1
@@ -585,8 +570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c9c446e978932489e4a24c023cecbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  width: 15
-  height: 15
+  width: 30
+  height: 30
   mapRenderer: {fileID: 1041831204}
 --- !u!4 &1259762150
 Transform:

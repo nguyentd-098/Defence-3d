@@ -572,7 +572,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   width: 30
   height: 30
+  seed: 5
   mapRenderer: {fileID: 1041831204}
+  autoSetPoints: 1
+  spawnPoint: {x: 2, y: 2}
+  playerBase: {x: 13, y: 13}
+  vfxHeightOffset: 0.5
+  enemyHeightOffset: 0.5
+  spawnVfxPrefab: {fileID: 5607819269926399345, guid: 45e0f06c750176947862c10346226439, type: 3}
+  baseVfxPrefab: {fileID: 3928998189374746443, guid: 00bba72dbda252a4eac12e218848cb44, type: 3}
+  tempEnemyPrefab: {fileID: 9186508871202691603, guid: 2b86fb300788dfb44b4de6f470516555, type: 3}
 --- !u!4 &1259762150
 Transform:
   m_ObjectHideFlags: 0

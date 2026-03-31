@@ -3,180 +3,146 @@ using System.Collections.Generic;
 
 public class MapGenerator
 {
+    public int seed = 0;
+    [Range(0f, 1f)] public float forestThreshold = 0.60f;
+    [Range(0f, 1f)] public float mountainThreshold = 0.65f;
+    public float mountainFreq = 0.08f;
+    public float biomeFreq = 0.10f;
+
+    // Các hướng di chuyển cho hệ tọa độ Odd-r
+    public static readonly Vector2Int[][] HexDirections = new Vector2Int[][]
+    {
+        new Vector2Int[] { new Vector2Int(+1,  0), new Vector2Int( 0, -1), new Vector2Int(-1, -1), new Vector2Int(-1,  0), new Vector2Int(-1, +1), new Vector2Int( 0, +1) },
+        new Vector2Int[] { new Vector2Int(+1,  0), new Vector2Int(+1, -1), new Vector2Int( 0, -1), new Vector2Int(-1,  0), new Vector2Int( 0, +1), new Vector2Int(+1, +1) }
+    };
+
     public MapData Generate(int width, int height)
     {
-        MapData map = new MapData(width, height);
+        int _seed = (seed == 0) ? Random.Range(1, 999999) : seed;
+        Random.InitState(_seed);
+        float _offsetMtn = (_seed / 7f) % 1000 + 200f;
+        float _offsetBiome = (_seed / 3f) % 1000 + 100f;
 
-        // 🎯 PATH
-        List<Vector2Int> basePath = GeneratePath(width, height);
-        HashSet<Vector2Int> path = ExpandPath(basePath);
+        MapData map = new MapData(width, height, _seed);
 
+        // 1. CHỈ TẠO ĐỊA HÌNH CƠ BẢN VÀ TRANG TRÍ
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector2Int pos = new Vector2Int(x, y);
+                float mtnNoise = Mathf.PerlinNoise(x * mountainFreq + _offsetMtn, y * mountainFreq + _offsetMtn);
+                TileData tile = new TileData(TileType.Grass, BiomeType.Plain) { height = 0 };
 
-                TileData tile;
+                bool isBorder = (x <= 1 || x >= width - 2 || y <= 1 || y >= height - 2);
 
-                // 🚧 PATH ƯU TIÊN
-                if (path.Contains(pos))
+                if (isBorder || mtnNoise > mountainThreshold)
                 {
-                    tile = new TileData(TileType.Road);
-                    tile.height = 0;
-                    map.tiles[x, y] = tile;
-                    continue;
-                }
-
-                // 🌊 HEIGHT (multi noise → có sóng)
-                float noise1 = Mathf.PerlinNoise(x * 0.05f, y * 0.05f);
-                float noise2 = Mathf.PerlinNoise(x * 0.15f + 50, y * 0.15f + 50);
-                float heightNoise = noise1 * 0.7f + noise2 * 0.3f;
-
-                int baseHeight = Mathf.FloorToInt(heightNoise * 2);
-
-                // 🏔️ MOUNTAIN CLUSTER
-                float mountainNoise = Mathf.PerlinNoise(x * 0.08f + 200, y * 0.08f + 200);
-
-                // 🌱 BIOME
-                float biome = Mathf.PerlinNoise(x * 0.1f + 100, y * 0.1f + 100);
-
-                // 🌊 WATER
-                if (biome < 0.28f)
-                {
-                    tile = new TileData(TileType.Water);
-                    tile.height = 0;
-                    map.tiles[x, y] = tile;
-                    continue;
-                }
-
-                // 🌱 GRASS
-                tile = new TileData(TileType.Grass);
-
-                // 🏔️ TẠO CỤM NÚI
-                if (mountainNoise > 0.6f)
-                {
-                    float t = (mountainNoise - 0.6f) / 0.4f;
-                    int mountainHeight = Mathf.RoundToInt(t * 3);
-                    tile.height = baseHeight + mountainHeight;
+                    tile.type = TileType.Mountain;
+                    tile.biome = BiomeType.Highland;
+                    tile.height = isBorder ? Random.Range(3, 6) : Random.Range(1, 4);
                 }
                 else
                 {
-                    tile.height = baseHeight;
-                }
-
-                // ❌ DỌN GẦN ĐƯỜNG (rất quan trọng)
-                if (IsNearPath(pos, path))
-                {
-                    tile.hasTree = false;
-                    tile.hasRock = false;
-                }
-                else
-                {
-                    // 🌲 TREE
-                    if (biome > 0.6f && tile.height < 2)
+                    // Đất bằng phẳng thì sinh cỏ cây
+                    float biomeNoise = Mathf.PerlinNoise(x * biomeFreq + _offsetBiome, y * biomeFreq + _offsetBiome);
+                    if (biomeNoise > forestThreshold)
+                    {
+                        tile.biome = BiomeType.Forest;
                         tile.hasTree = true;
-
-                    // 🪨 ROCK
-                    else if (biome < 0.4f && tile.height < 2)
+                    }
+                    else if (biomeNoise < 0.25f)
+                    {
+                        tile.biome = BiomeType.Rocky;
                         tile.hasRock = true;
+                    }
                 }
-
                 map.tiles[x, y] = tile;
             }
         }
 
+        // Trả về map hoàn toàn tự nhiên, không có đường đi cho sẵn
         return map;
     }
 
-    // ================= PATH =================
-
-    List<Vector2Int> GeneratePath(int width, int height)
+    // ──────────────────────────────────────────
+    // 2. HÀM TÌM ĐƯỜNG ĐỘNG (Dùng bất cứ lúc nào)
+    // ──────────────────────────────────────────
+    public List<Vector2Int> FindPath(MapData map, Vector2Int start, Vector2Int target)
     {
-        List<Vector2Int> path = new List<Vector2Int>();
+        var openSet = new List<Vector2Int> { start };
+        var cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+        var gScore = new Dictionary<Vector2Int, float> { [start] = 0 };
+        var fScore = new Dictionary<Vector2Int, float> { [start] = HexDistance(start, target) };
 
-        // choose random start/end rows (avoid edges)
-        int margin = 2;
-        int startY = Random.Range(margin, Mathf.Max(margin + 1, height - margin));
-        int endY = Random.Range(margin, Mathf.Max(margin + 1, height - margin));
+        int emergencyBreak = 0;
 
-        // start at left edge, end at right edge (randomized vertical positions)
-        List<Vector2Int> points = new List<Vector2Int>();
-        points.Add(new Vector2Int(0, startY));
-
-        int segments = Random.Range(4, 8);
-        for (int i = 1; i < segments; i++)
+        while (openSet.Count > 0)
         {
-            // ensure x increases so the path flows left->right
-            int x = (width * i) / segments;
-            int y = Random.Range(margin, Mathf.Max(margin + 1, height - margin));
-            points.Add(new Vector2Int(x, y));
+            emergencyBreak++;
+            if (emergencyBreak > 5000) break;
+
+            openSet.Sort((a, b) => fScore.GetValueOrDefault(a, float.MaxValue).CompareTo(fScore.GetValueOrDefault(b, float.MaxValue)));
+            Vector2Int current = openSet[0];
+
+            if (current == target) return ReconstructPath(cameFrom, current);
+
+            openSet.Remove(current);
+
+            foreach (Vector2Int neighbor in GetNeighbors(current, map.width, map.height))
+            {
+                // Điều kiện đi được: Cột mốc không phải núi cao (hoặc không có tháp chắn của Player)
+                TileData nTile = map.tiles[neighbor.x, neighbor.y];
+                if (nTile.height > 1 && neighbor != target) continue;
+
+                // Có thể cộng thêm "cost" nếu đi qua rừng cây thì chậm hơn (vd: terrainCost = 5)
+                float terrainCost = nTile.hasTree ? 2f : 1f;
+                float tentative_gScore = gScore[current] + terrainCost;
+
+                if (tentative_gScore < gScore.GetValueOrDefault(neighbor, float.MaxValue))
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentative_gScore;
+                    fScore[neighbor] = gScore[neighbor] + HexDistance(neighbor, target);
+
+                    if (!openSet.Contains(neighbor)) openSet.Add(neighbor);
+                }
+            }
         }
+        return null; // Không tìm thấy đường
+    }
 
-        points.Add(new Vector2Int(width - 1, endY));
-
-        for (int i = 0; i < points.Count - 1; i++)
+    List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
+    {
+        var path = new List<Vector2Int> { current };
+        while (cameFrom.ContainsKey(current))
         {
-            var segment = DrawLine(points[i], points[i + 1]);
-            path.AddRange(segment);
+            current = cameFrom[current];
+            path.Add(current);
         }
-
+        path.Reverse();
         return path;
     }
-    List<Vector2Int> DrawLine(Vector2Int a, Vector2Int b)
+
+    List<Vector2Int> GetNeighbors(Vector2Int hex, int width, int height)
     {
-        List<Vector2Int> result = new List<Vector2Int>();
-        int dx = Mathf.Abs(b.x - a.x);
-        int dy = Mathf.Abs(b.y - a.y);
-        int sx = a.x < b.x ? 1 : -1;
-        int sy = a.y < b.y ? 1 : -1;
-        int err = dx - dy;
-        Vector2Int current = a;
-        while (true)
+        var neighbors = new List<Vector2Int>();
+        int parity = hex.y & 1;
+        foreach (var dir in HexDirections[parity])
         {
-            result.Add(current);
-            if (current == b)
-                break;
-            int e2 = 2 * err;
-            if (e2 > -dy)
-            {
-                err -= dy;
-                current.x += sx;
-            }
-            if (e2 < dx)
-            {
-                err += dx;
-                current.y += sy;
-            }
+            int nx = hex.x + dir.x;
+            int ny = hex.y + dir.y;
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                neighbors.Add(new Vector2Int(nx, ny));
         }
-        return result;
+        return neighbors;
     }
 
-    // ================= PATH WIDTH =================
-
-    HashSet<Vector2Int> ExpandPath(List<Vector2Int> path)
+    float HexDistance(Vector2Int a, Vector2Int b)
     {
-        HashSet<Vector2Int> result = new HashSet<Vector2Int>();
-
-        foreach (var p in path)
-        {
-            result.Add(p);
-            result.Add(new Vector2Int(p.x, p.y + 1));
-            result.Add(new Vector2Int(p.x, p.y - 1));
-        }
-
-        return result;
-    }
-
-    // ================= CLEAR AREA =================
-
-    bool IsNearPath(Vector2Int pos, HashSet<Vector2Int> path)
-    {
-        foreach (var p in path)
-        {
-            if (Vector2Int.Distance(p, pos) <= 2)
-                return true;
-        }
-        return false;
+        float qa = a.x - (a.y - (a.y & 1)) / 2f;
+        float qb = b.x - (b.y - (b.y & 1)) / 2f;
+        Vector3 aCube = new Vector3(qa, -qa - a.y, a.y);
+        Vector3 bCube = new Vector3(qb, -qb - b.y, b.y);
+        return Mathf.Max(Mathf.Abs(aCube.x - bCube.x), Mathf.Abs(aCube.y - bCube.y), Mathf.Abs(aCube.z - bCube.z));
     }
 }
